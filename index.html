@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tealus — オープンソース社内メッセンジャー</title>
+  <meta name="description" content="Tealus は、LINEライクな直感的UIの社内メッセンジャー。画像・動画はサーバー保存、AI連携、音声通話まで。オンプレミスで完全自社管理。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💬</text></svg>">
+  <meta property="og:title" content="Tealus — オープンソース社内メッセンジャー">
+  <meta property="og:description" content="LINEライクな直感的UIの社内メッセンジャー。画像・動画はサーバー保存、AI連携、音声通話まで。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://tealus.dev">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="logo">Tealus</div>
+      <nav class="nav">
+        <a href="#features">特長</a>
+        <a href="#capabilities">機能</a>
+        <a href="#techstack">技術スタック</a>
+        <a href="https://docs.tealus.dev" target="_blank">ドキュメント</a>
+        <a href="https://github.com/gamasenninn/tealus" target="_blank" class="btn btn-outline">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <h1>社内コミュニケーションを<br><span>もっとシンプルに</span></h1>
+      <p>Tealus は、LINEのような直感的なUIの社内メッセンジャー。<br>画像・動画はサーバー保存。AI連携。音声通話。<br>すべてオンプレミスで完全自社管理。</p>
+      <div class="hero-buttons">
+        <a href="https://docs.tealus.dev/admin/server-setup/" class="btn btn-primary">はじめる</a>
+        <a href="https://docs.tealus.dev" class="btn btn-outline">ドキュメントを読む</a>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-visual-placeholder">スクリーンショットをここに配置</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-title">
+        <h2>なぜ Tealus？</h2>
+        <p>既存メッセンジャーの課題を解決するために生まれました</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">💾</div>
+          <h3>サーバー保存</h3>
+          <p>画像・動画・ファイルはすべてサーバーに保存。端末の容量を圧迫しません。サムネイル自動生成で高速表示。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h3>完全自社管理</h3>
+          <p>オンプレミスで運用可能。データは社外に一切出ません。Docker Compose で簡単にデプロイ。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📱</div>
+          <h3>PWA対応</h3>
+          <p>スマホ・PCのブラウザからアプリとして利用可能。インストール不要、ホーム画面に追加するだけ。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🤖</div>
+          <h3>AI連携</h3>
+          <p>AIエージェントがチャットに参加。日常Q&Aから複雑なコード生成まで、3層構造で最適に処理。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📞</div>
+          <h3>音声・ビデオ通話</h3>
+          <p>WebRTC（mediasoup SFU）によるグループ通話。トランシーバー（PTT）モードも搭載。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔊</div>
+          <h3>TTS 読み上げ</h3>
+          <p>AIの回答を音声で自動読み上げ。Aivis Cloud API による高品質日本語音声合成、10種類の声から選択。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Capabilities -->
+  <section class="capabilities" id="capabilities">
+    <div class="container">
+      <div class="capabilities-grid">
+        <div class="capabilities-content">
+          <h2>LINEライクな<br>直感的チャット体験</h2>
+          <p>使い慣れたメッセンジャーの操作感をそのままに、業務に必要な機能を詰め込みました。</p>
+          <ul class="capability-list">
+            <li>リアルタイムメッセージ（Socket.IO）</li>
+            <li>既読表示（未読数 + 既読数）</li>
+            <li>リプライ・メッセージ編集・削除</li>
+            <li>絵文字リアクション（6種類）</li>
+            <li>メンション（@ユーザー名 / @all / @here）</li>
+            <li>メッセージ検索（全ルーム横断）</li>
+            <li>AIスタンプ自動生成（1パック16枚）</li>
+            <li>音声メッセージ（Whisper文字起こし + AI整形）</li>
+            <li>TODO機能（タグベース）</li>
+            <li>カスタムテーマ・文字サイズ設定</li>
+          </ul>
+        </div>
+        <div class="capabilities-visual">スクリーンショットをここに配置</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tech Stack -->
+  <section class="techstack" id="techstack">
+    <div class="container">
+      <div class="section-title">
+        <h2>技術スタック</h2>
+        <p>モダンな技術で構築されたオープンソースプロジェクト</p>
+      </div>
+      <div class="tech-grid">
+        <div class="tech-item">
+          <div class="tech-label">フロントエンド</div>
+          <div class="tech-name">React 19 + Vite</div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-label">状態管理</div>
+          <div class="tech-name">Zustand</div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-label">バックエンド</div>
+          <div class="tech-name">Node.js + Express</div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-label">リアルタイム</div>
+          <div class="tech-name">Socket.IO</div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-label">データベース</div>
+          <div class="tech-name">PostgreSQL 16</div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-label">キャッシュ</div>
+          <div class="tech-name">Redis 7</div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-label">通話</div>
+          <div class="tech-name">mediasoup (WebRTC)</div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-label">コンテナ</div>
+          <div class="tech-name">Docker Compose</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="container">
+      <h2>Tealus をはじめよう</h2>
+      <p>MIT License で公開中。自由にフォーク・カスタマイズできます。</p>
+      <div class="cta-buttons">
+        <a href="https://github.com/gamasenninn/tealus" target="_blank" class="btn btn-primary">GitHub で見る</a>
+        <a href="https://docs.tealus.dev" target="_blank" class="btn btn-outline">ドキュメント</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div>&copy; 2026 Tealus Project. MIT License.</div>
+      <div class="footer-links">
+        <a href="https://github.com/gamasenninn/tealus" target="_blank">GitHub</a>
+        <a href="https://docs.tealus.dev" target="_blank">ドキュメント</a>
+        <a href="https://github.com/gamasenninn/tealus/issues" target="_blank">Issues</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
