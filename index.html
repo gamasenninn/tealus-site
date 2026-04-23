@@ -14,6 +14,7 @@
   <meta property="og:description" content="LINEライクな直感的UIの社内メッセンジャー。画像・動画はサーバー保存、AI連携、音声通話まで。">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://tealus.dev">
+  <meta property="og:image" content="https://tealus.dev/assets/images/og-image.png">
 </head>
 <body>
 
@@ -23,6 +24,7 @@
       <div class="logo">Tealus</div>
       <nav class="nav">
         <a href="#features">特長</a>
+        <a href="#comparison">比較</a>
         <a href="#capabilities">機能</a>
         <a href="#techstack">技術スタック</a>
         <a href="https://docs.tealus.dev" target="_blank">ドキュメント</a>
@@ -34,8 +36,8 @@
   <!-- Hero -->
   <section class="hero">
     <div class="container">
-      <h1>社内コミュニケーションを<br><span>もっとシンプルに</span></h1>
-      <p>Tealus は、LINEのような直感的なUIの社内メッセンジャー。<br>画像・動画はサーバー保存。AI連携。音声通話。<br>すべてオンプレミスで完全自社管理。</p>
+      <h1>AI が声で答える。<br><span>NAS 1台で動く。月額ゼロ円。</span></h1>
+      <p>Tealus は、LINEのような直感的UIのオープンソース社内メッセンジャー。<br>AI エージェントがチャットに参加し、音声で応答。<br>すべてオンプレミス。50人使っても追加費用ゼロ。</p>
       <div class="hero-buttons">
         <a href="https://docs.tealus.dev/admin/server-setup/" class="btn btn-primary">はじめる</a>
         <a href="https://docs.tealus.dev" class="btn btn-outline">ドキュメントを読む</a>
@@ -51,39 +53,71 @@
     <div class="container">
       <div class="section-title">
         <h2>なぜ Tealus？</h2>
-        <p>既存メッセンジャーの課題を解決するために生まれました</p>
+        <p>Slack / Teams にない体験を、月額ゼロ円で</p>
       </div>
       <div class="features-grid">
         <div class="feature-card">
-          <div class="feature-icon">💾</div>
-          <h3>サーバー保存</h3>
-          <p>画像・動画・ファイルはすべてサーバーに保存。端末の容量を圧迫しません。サムネイル自動生成で高速表示。</p>
+          <div class="feature-icon">🔊</div>
+          <h3>AI が声で答える</h3>
+          <p>テキスト応答と同時に音声で読み上げ。Aivis Cloud による高品質日本語音声合成、10種類の声から選択可能。</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">🔒</div>
-          <h3>完全自社管理</h3>
-          <p>オンプレミスで運用可能。データは社外に一切出ません。Docker Compose で簡単にデプロイ。</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">📱</div>
-          <h3>PWA対応</h3>
-          <p>スマホ・PCのブラウザからアプリとして利用可能。インストール不要、ホーム画面に追加するだけ。</p>
+          <div class="feature-icon">💰</div>
+          <h3>月額ゼロ円</h3>
+          <p>NAS 1台で完結。50人が使っても追加費用なし。Docker Compose で簡単デプロイ。データは社外に出ません。</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">🤖</div>
-          <h3>AI連携</h3>
-          <p>AIエージェントがチャットに参加。日常Q&Aから複雑なコード生成まで、3層構造で最適に処理。</p>
+          <h3>AI と人間が対等</h3>
+          <p>AI エージェントがチャットに参加して議論。日常Q&Aからコード生成まで、3層構造で最適に処理。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📱</div>
+          <h3>LINE のように簡単</h3>
+          <p>使い慣れた操作感。PWA対応でインストール不要、スマホ・PCのブラウザからアプリとして利用。</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">📞</div>
-          <h3>音声・ビデオ通話</h3>
-          <p>WebRTC（mediasoup SFU）によるグループ通話。トランシーバー（PTT）モードも搭載。</p>
+          <h3>通話もトランシーバーも</h3>
+          <p>WebRTC（mediasoup SFU）によるグループ通話。PTT（Push-to-Talk）トランシーバーモードも搭載。</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">🔊</div>
-          <h3>TTS 読み上げ</h3>
-          <p>AIの回答を音声で自動読み上げ。Aivis Cloud API による高品質日本語音声合成、10種類の声から選択。</p>
+          <div class="feature-icon">🔓</div>
+          <h3>オープンソース</h3>
+          <p>MIT License。自由にフォーク・カスタマイズ。オンプレミスで完全自社管理、ベンダーロックインなし。</p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comparison -->
+  <section class="comparison" id="comparison">
+    <div class="container">
+      <div class="section-title">
+        <h2>他サービスとの比較</h2>
+        <p>Tealus だけの組み合わせがあります</p>
+      </div>
+      <div class="comparison-table-wrapper">
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th class="highlight">Tealus</th>
+              <th>Slack</th>
+              <th>Teams</th>
+              <th>Mattermost</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>チャット</td><td class="highlight">&#10003;</td><td>&#10003;</td><td>&#10003;</td><td>&#10003;</td></tr>
+            <tr><td>AI エージェント</td><td class="highlight">&#10003;</td><td>&#10003;</td><td>&#10003;</td><td>&#9651;</td></tr>
+            <tr><td>AI 音声応答</td><td class="highlight">&#10003;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
+            <tr><td>音声・ビデオ通話</td><td class="highlight">&#10003;</td><td>&#10003;</td><td>&#10003;</td><td>&#10003;</td></tr>
+            <tr><td>トランシーバー (PTT)</td><td class="highlight">&#10003;</td><td>&mdash;</td><td>&#10003;</td><td>&mdash;</td></tr>
+            <tr><td>完全セルフホスト</td><td class="highlight">&#10003;</td><td>&mdash;</td><td>&mdash;</td><td>&#10003;</td></tr>
+            <tr><td>月額費用 (50人)</td><td class="highlight">0円</td><td>~5万円</td><td>~3万円</td><td>0円~</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </section>
@@ -152,6 +186,39 @@
         <div class="tech-item">
           <div class="tech-label">コンテナ</div>
           <div class="tech-name">Docker Compose</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Story -->
+  <section class="story" id="story">
+    <div class="container">
+      <div class="section-title">
+        <h2>開発ストーリー</h2>
+        <p>AI と人間が一緒に作っています</p>
+      </div>
+      <div class="story-timeline">
+        <div class="story-item">
+          <div class="story-date">2025.04</div>
+          <div class="story-content">
+            <h3>プロジェクト開始</h3>
+            <p>「自社データを外に出さず、AI と自然に会話できるメッセンジャーが欲しい」——開発者の課題意識から Tealus が生まれました。</p>
+          </div>
+        </div>
+        <div class="story-item">
+          <div class="story-date">2025.08</div>
+          <div class="story-content">
+            <h3>AI が"声"を持った日</h3>
+            <p>Aivis Cloud API との統合により、AI がテキストだけでなく音声で応答。トランシーバーから AI の声が聞こえた瞬間、チームの使い方が一変しました。</p>
+          </div>
+        </div>
+        <div class="story-item">
+          <div class="story-date">2026.01</div>
+          <div class="story-content">
+            <h3>AI と人間が対等に</h3>
+            <p>AI エージェントがチャットルームのメンバーとして議論に参加。メンション機能は AI が3パターンを提案し、人間が選び、AI が実装。ドキュメントも AI が書き、別の AI がレビューしています。</p>
+          </div>
         </div>
       </div>
     </div>

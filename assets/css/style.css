@@ -127,11 +127,18 @@ img { max-width: 100%; height: auto; }
   border-radius: 12px;
   height: 400px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   color: var(--primary-dark);
   font-size: 1.1rem;
   font-weight: 500;
+}
+
+.hero-visual-placeholder::before {
+  content: '📸';
+  font-size: 2rem;
+  margin-bottom: 8px;
 }
 
 /* ===== Features ===== */
@@ -196,6 +203,56 @@ img { max-width: 100%; height: auto; }
   line-height: 1.6;
 }
 
+/* ===== Comparison ===== */
+.comparison {
+  padding: 100px 0;
+}
+
+.comparison-table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  min-width: 600px;
+}
+
+.comparison-table th,
+.comparison-table td {
+  padding: 14px 20px;
+  text-align: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.comparison-table th {
+  font-weight: 700;
+  font-size: 1rem;
+  padding-bottom: 16px;
+  color: var(--text-secondary);
+}
+
+.comparison-table th.highlight {
+  color: var(--primary);
+  font-size: 1.1rem;
+}
+
+.comparison-table td.highlight {
+  color: var(--primary-dark);
+  font-weight: 700;
+}
+
+.comparison-table td:first-child {
+  text-align: left;
+  font-weight: 500;
+}
+
+.comparison-table tbody tr:hover {
+  background: var(--bg-alt);
+}
+
 /* ===== Capabilities ===== */
 .capabilities { padding: 100px 0; }
 
@@ -238,10 +295,17 @@ img { max-width: 100%; height: auto; }
   border-radius: 16px;
   height: 360px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   color: var(--primary-dark);
   font-weight: 500;
+}
+
+.capabilities-visual::before {
+  content: '💬';
+  font-size: 2rem;
+  margin-bottom: 8px;
 }
 
 /* ===== Tech Stack ===== */
@@ -275,6 +339,53 @@ img { max-width: 100%; height: auto; }
 .tech-item .tech-name {
   font-size: 1rem;
   font-weight: 700;
+}
+
+/* ===== Story ===== */
+.story {
+  padding: 100px 0;
+}
+
+.story-timeline {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.story-item {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.story-date {
+  flex-shrink: 0;
+  width: 80px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--primary);
+  padding-top: 4px;
+}
+
+.story-content {
+  background: var(--bg-alt);
+  border-radius: var(--radius);
+  padding: 24px;
+  border-left: 3px solid var(--primary);
+}
+
+.story-content h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.story-content p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.6;
 }
 
 /* ===== CTA ===== */
@@ -321,6 +432,10 @@ img { max-width: 100%; height: auto; }
   .features-grid { grid-template-columns: 1fr; }
   .capabilities-grid { grid-template-columns: 1fr; }
   .tech-grid { grid-template-columns: repeat(2, 1fr); }
+  .comparison-table { font-size: 0.85rem; }
+  .comparison-table th, .comparison-table td { padding: 10px 12px; }
+  .story-item { flex-direction: column; gap: 8px; }
+  .story-date { width: auto; }
   .nav { display: none; }
   .footer .container { flex-direction: column; gap: 16px; text-align: center; }
 }
