@@ -229,9 +229,67 @@ img { max-width: 100%; height: auto; }
   line-height: 1.6;
 }
 
-.usecase-link {
+/* ===== Usecases ===== */
+.usecases {
+  padding: 100px 0;
+}
+
+.usecases-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.usecase-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 28px;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.usecase-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.usecase-icon {
+  font-size: 2.5rem;
+  margin-bottom: 12px;
+}
+
+.usecase-card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.usecase-card p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.usecase-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.usecase-tag {
+  background: rgba(0, 180, 160, 0.1);
+  color: #00B4A0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+.usecases-more {
   text-align: center;
-  margin-top: 48px;
+  margin-top: 8px;
 }
 
 /* ===== Comparison ===== */
@@ -515,6 +573,7 @@ img { max-width: 100%; height: auto; }
   .hero h1 { font-size: 1.8rem; }
   .hero { padding: 120px 0 0; }
   .features-grid { grid-template-columns: 1fr; }
+  .usecases-grid { grid-template-columns: 1fr; }
   .capabilities-grid { grid-template-columns: 1fr; }
   .tech-grid { grid-template-columns: repeat(2, 1fr); }
   .comparison-table { font-size: 0.85rem; }
