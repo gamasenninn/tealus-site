@@ -43,9 +43,47 @@
         <a href="https://docs.tealus.dev" class="btn btn-outline">ドキュメントを読む</a>
       </div>
       <div class="hero-visual">
-        <div class="hero-visual-placeholder">スクリーンショットをここに配置</div>
+        <div class="hero-visual-placeholder">
+          <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+            <!-- Chat window frame -->
+            <rect x="40" y="20" width="720" height="460" rx="16" fill="white" opacity="0.95"/>
+            <!-- Header bar -->
+            <rect x="40" y="20" width="720" height="56" rx="16" fill="#00B4A0"/>
+            <rect x="40" y="60" width="720" height="16" fill="#00B4A0"/>
+            <circle cx="76" cy="48" r="16" fill="rgba(255,255,255,0.3)"/>
+            <rect x="100" y="40" width="120" height="16" rx="4" fill="rgba(255,255,255,0.8)"/>
+            <!-- Message bubbles -->
+            <rect x="400" y="100" width="320" height="60" rx="16" fill="#00B4A0"/>
+            <text x="420" y="135" font-size="14" fill="white" font-family="sans-serif">Tealus の開発状況を教えて</text>
+            <rect x="80" y="180" width="380" height="80" rx="16" fill="#F0F4F3"/>
+            <text x="100" y="210" font-size="13" fill="#333" font-family="sans-serif">Phase 4 まで完了しています。</text>
+            <text x="100" y="230" font-size="13" fill="#333" font-family="sans-serif">WebRTC 通話と TTS を統合しました。</text>
+            <rect x="100" y="248" width="60" height="6" rx="3" fill="#00B4A0" opacity="0.4"/>
+            <!-- AI badge -->
+            <rect x="80" y="164" width="36" height="18" rx="9" fill="#00B4A0"/>
+            <text x="88" y="177" font-size="10" fill="white" font-family="sans-serif">AI</text>
+            <!-- Voice indicator -->
+            <rect x="80" y="280" width="200" height="44" rx="22" fill="#E8F5E9" stroke="#00B4A0" stroke-width="1.5"/>
+            <text x="116" y="307" font-size="12" fill="#00B4A0" font-family="sans-serif">音声で読み上げ中...</text>
+            <circle cx="100" cy="302" r="8" fill="#00B4A0" opacity="0.6"/>
+            <rect x="94" y="298" width="4" height="8" rx="2" fill="white"/>
+            <rect x="100" y="296" width="4" height="12" rx="2" fill="white"/>
+            <!-- More messages -->
+            <rect x="440" y="340" width="280" height="48" rx="16" fill="#00B4A0"/>
+            <text x="460" y="369" font-size="14" fill="white" font-family="sans-serif">ありがとう！通話で詳しく</text>
+            <!-- Input bar -->
+            <rect x="40" y="420" width="720" height="60" rx="0" fill="#FAFAFA"/>
+            <rect x="40" y="420" width="720" height="1" fill="#E0E0E0"/>
+            <rect x="70" y="436" width="580" height="32" rx="16" fill="white" stroke="#E0E0E0" stroke-width="1"/>
+            <circle cx="700" cy="452" r="16" fill="#00B4A0"/>
+            <polygon points="694,448 710,452 694,456" fill="white"/>
+          </svg>
+        </div>
       </div>
     </div>
+    <svg class="hero-wave" viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <path d="M0,40 C360,80 720,0 1080,40 C1260,60 1380,50 1440,40 L1440,80 L0,80 Z" fill="#F5F9F8"/>
+    </svg>
   </section>
 
   <!-- Features -->
@@ -111,11 +149,11 @@
           <tbody>
             <tr><td>チャット</td><td class="highlight">&#10003;</td><td>&#10003;</td><td>&#10003;</td><td>&#10003;</td></tr>
             <tr><td>AI エージェント</td><td class="highlight">&#10003;</td><td>&#10003;</td><td>&#10003;</td><td>&#9651;</td></tr>
-            <tr><td>AI 音声応答</td><td class="highlight">&#10003;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
+            <tr class="unique-row"><td>AI 音声応答</td><td class="highlight">&#10003;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
             <tr><td>音声・ビデオ通話</td><td class="highlight">&#10003;</td><td>&#10003;</td><td>&#10003;</td><td>&#10003;</td></tr>
             <tr><td>トランシーバー (PTT)</td><td class="highlight">&#10003;</td><td>&mdash;</td><td>&#10003;</td><td>&mdash;</td></tr>
             <tr><td>完全セルフホスト</td><td class="highlight">&#10003;</td><td>&mdash;</td><td>&mdash;</td><td>&#10003;</td></tr>
-            <tr><td>月額費用 (50人)</td><td class="highlight">0円</td><td>~5万円</td><td>~3万円</td><td>0円~</td></tr>
+            <tr><td>月額費用 (50人)</td><td class="highlight price-zero">0円</td><td>~5万円</td><td>~3万円</td><td>0円~</td></tr>
           </tbody>
         </table>
       </div>
@@ -142,7 +180,41 @@
             <li>カスタムテーマ・文字サイズ設定</li>
           </ul>
         </div>
-        <div class="capabilities-visual">スクリーンショットをここに配置</div>
+        <div class="capabilities-visual">
+          <svg viewBox="0 0 400 360" xmlns="http://www.w3.org/2000/svg">
+            <!-- Phone frame -->
+            <rect x="80" y="10" width="240" height="340" rx="24" fill="white" stroke="#E0E0E0" stroke-width="1.5"/>
+            <!-- Status bar -->
+            <rect x="80" y="10" width="240" height="40" rx="24" fill="#00B4A0"/>
+            <rect x="80" y="40" width="240" height="10" fill="#00B4A0"/>
+            <text x="200" y="35" font-size="12" fill="white" font-family="sans-serif" text-anchor="middle">グループチャット</text>
+            <!-- Messages -->
+            <rect x="100" y="65" width="140" height="36" rx="12" fill="#F0F4F3"/>
+            <text x="114" y="88" font-size="11" fill="#333" font-family="sans-serif">おはようございます</text>
+            <rect x="180" y="110" width="120" height="36" rx="12" fill="#00B4A0"/>
+            <text x="194" y="133" font-size="11" fill="white" font-family="sans-serif">おはよう！</text>
+            <!-- Read indicator -->
+            <text x="268" y="152" font-size="9" fill="#00B4A0" font-family="sans-serif">既読 3</text>
+            <!-- Reaction -->
+            <rect x="100" y="160" width="160" height="36" rx="12" fill="#F0F4F3"/>
+            <text x="114" y="183" font-size="11" fill="#333" font-family="sans-serif">会議の資料できた？</text>
+            <rect x="100" y="198" width="44" height="20" rx="10" fill="#FFF3E0" stroke="#FFB74D" stroke-width="1"/>
+            <text x="112" y="212" font-size="11" font-family="sans-serif">👍 2</text>
+            <!-- AI stamp -->
+            <rect x="100" y="230" width="120" height="50" rx="12" fill="#E8F5E9"/>
+            <rect x="100" y="225" width="24" height="14" rx="7" fill="#00B4A0"/>
+            <text x="105" y="235" font-size="8" fill="white" font-family="sans-serif">AI</text>
+            <text x="114" y="253" font-size="10" fill="#333" font-family="sans-serif">資料を確認中...</text>
+            <text x="114" y="268" font-size="10" fill="#333" font-family="sans-serif">3件見つかりました</text>
+            <!-- Input area -->
+            <rect x="80" y="300" width="240" height="50" rx="0" fill="#FAFAFA"/>
+            <rect x="80" y="300" width="240" height="1" fill="#E0E0E0"/>
+            <rect x="96" y="312" width="170" height="28" rx="14" fill="white" stroke="#E0E0E0" stroke-width="1"/>
+            <circle cx="288" cy="326" r="14" fill="#00B4A0"/>
+            <rect x="282" y="320" width="6" height="12" rx="3" fill="white"/>
+            <rect x="290" y="318" width="2" height="6" rx="1" fill="white" transform="rotate(30, 291, 321)"/>
+          </svg>
+        </div>
       </div>
     </div>
   </section>
@@ -200,24 +272,38 @@
       </div>
       <div class="story-timeline">
         <div class="story-item">
-          <div class="story-date">2025.04</div>
+          <div class="story-date">2026.04.05</div>
           <div class="story-content">
             <h3>プロジェクト開始</h3>
-            <p>「自社データを外に出さず、AI と自然に会話できるメッセンジャーが欲しい」——開発者の課題意識から Tealus が生まれました。</p>
+            <p>「社内データを外に出さず、LINEのように使えるメッセンジャーが欲しい」——開発者の課題意識から Tealus が生まれました。Claude と人間の2人チームで、TDD で開発を開始。わずか2日で最初のチャット機能が動きました。</p>
           </div>
         </div>
         <div class="story-item">
-          <div class="story-date">2025.08</div>
+          <div class="story-date">2026.04.13</div>
           <div class="story-content">
-            <h3>AI が"声"を持った日</h3>
-            <p>Aivis Cloud API との統合により、AI がテキストだけでなく音声で応答。トランシーバーから AI の声が聞こえた瞬間、チームの使い方が一変しました。</p>
+            <h3>AI エージェントがチームに加わった</h3>
+            <p>3層エージェント構造（Router + Light + Deep）を実装。AI がチャットルームのメンバーとして議論に参加するようになりました。メンション機能は AI が3パターンを提案し、人間が選び、AI が実装。3つの知性がひとつのルームで協働しています。</p>
           </div>
         </div>
         <div class="story-item">
-          <div class="story-date">2026.01</div>
+          <div class="story-date">2026.04.18</div>
           <div class="story-content">
-            <h3>AI と人間が対等に</h3>
-            <p>AI エージェントがチャットルームのメンバーとして議論に参加。メンション機能は AI が3パターンを提案し、人間が選び、AI が実装。ドキュメントも AI が書き、別の AI がレビューしています。</p>
+            <h3>通話とトランシーバーが動いた</h3>
+            <p>mediasoup SFU によるグループ通話と、Web トランシーバー（PTT）を実装。ブラウザだけで音声通話もトランシーバーも。外部サービスへの依存ゼロ。NAS 1台の中で全てが完結します。</p>
+          </div>
+        </div>
+        <div class="story-item">
+          <div class="story-date">2026.04.22</div>
+          <div class="story-content">
+            <h3>AI が声を持った日</h3>
+            <p>PlainTransport の実験から始まり、Aivis Cloud API を発見。30種類の声を試聴して凛音エルを選び、agent-server に自動読み上げを統合。AI の回答がトランシーバーから聞こえた瞬間、開発の風景が一変しました。声はエージェントの人格の一部になりました。</p>
+          </div>
+        </div>
+        <div class="story-item">
+          <div class="story-date">2026.04.24</div>
+          <div class="story-content">
+            <h3>AI が AI に仕事を振る</h3>
+            <p>開発責任者（Claude）がドキュメントをレビューし、GitHub Issue で改善指示を記載。ドキュメント班（別の AI）が Issue を見て更新し、開発責任者がレビューして承認。AI どうしが GitHub で協働する世界が、Tealus の中で実現しています。</p>
           </div>
         </div>
       </div>
