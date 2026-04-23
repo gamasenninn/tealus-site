@@ -146,21 +146,10 @@ img { max-width: 100%; height: auto; }
   margin-top: -1px;
 }
 
-.hero-visual-placeholder {
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 12px 12px 0 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 0;
-  overflow: hidden;
-}
-
-.hero-visual-placeholder svg {
-  width: 100%;
+.hero-img {
+  max-width: 100%;
   height: auto;
+  border-radius: 12px;
   display: block;
 }
 
@@ -255,8 +244,10 @@ img { max-width: 100%; height: auto; }
   box-shadow: 0 8px 24px rgba(0, 180, 160, 0.15);
 }
 
-.usecase-icon {
-  font-size: 2.5rem;
+.usecase-img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
   margin-bottom: 16px;
 }
 
@@ -414,22 +405,16 @@ img { max-width: 100%; height: auto; }
 }
 
 .capabilities-visual {
-  background: linear-gradient(135deg, #E8F5E9, var(--primary-light));
-  border-radius: 16px;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: var(--primary-dark);
-  font-weight: 500;
-  font-size: 0;
-  overflow: hidden;
 }
 
-.capabilities-visual svg {
-  width: 100%;
+.capabilities-img {
+  max-width: 320px;
   height: auto;
-  display: block;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
 }
 
 /* ===== Tech Stack ===== */

@@ -44,42 +44,7 @@
         <a href="https://docs.tealus.dev" class="btn btn-outline">ドキュメントを読む</a>
       </div>
       <div class="hero-visual">
-        <div class="hero-visual-placeholder">
-          <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
-            <!-- Chat window frame -->
-            <rect x="40" y="20" width="720" height="460" rx="16" fill="white" opacity="0.95"/>
-            <!-- Header bar -->
-            <rect x="40" y="20" width="720" height="56" rx="16" fill="#00B4A0"/>
-            <rect x="40" y="60" width="720" height="16" fill="#00B4A0"/>
-            <circle cx="76" cy="48" r="16" fill="rgba(255,255,255,0.3)"/>
-            <rect x="100" y="40" width="120" height="16" rx="4" fill="rgba(255,255,255,0.8)"/>
-            <!-- Message bubbles -->
-            <rect x="400" y="100" width="320" height="60" rx="16" fill="#00B4A0"/>
-            <text x="420" y="135" font-size="14" fill="white" font-family="sans-serif">Tealus の開発状況を教えて</text>
-            <rect x="80" y="180" width="380" height="80" rx="16" fill="#F0F4F3"/>
-            <text x="100" y="210" font-size="13" fill="#333" font-family="sans-serif">Phase 4 まで完了しています。</text>
-            <text x="100" y="230" font-size="13" fill="#333" font-family="sans-serif">WebRTC 通話と TTS を統合しました。</text>
-            <rect x="100" y="248" width="60" height="6" rx="3" fill="#00B4A0" opacity="0.4"/>
-            <!-- AI badge -->
-            <rect x="80" y="164" width="36" height="18" rx="9" fill="#00B4A0"/>
-            <text x="88" y="177" font-size="10" fill="white" font-family="sans-serif">AI</text>
-            <!-- Voice indicator -->
-            <rect x="80" y="280" width="200" height="44" rx="22" fill="#E8F5E9" stroke="#00B4A0" stroke-width="1.5"/>
-            <text x="116" y="307" font-size="12" fill="#00B4A0" font-family="sans-serif">音声で読み上げ中...</text>
-            <circle cx="100" cy="302" r="8" fill="#00B4A0" opacity="0.6"/>
-            <rect x="94" y="298" width="4" height="8" rx="2" fill="white"/>
-            <rect x="100" y="296" width="4" height="12" rx="2" fill="white"/>
-            <!-- More messages -->
-            <rect x="440" y="340" width="280" height="48" rx="16" fill="#00B4A0"/>
-            <text x="460" y="369" font-size="14" fill="white" font-family="sans-serif">ありがとう！通話で詳しく</text>
-            <!-- Input bar -->
-            <rect x="40" y="420" width="720" height="60" rx="0" fill="#FAFAFA"/>
-            <rect x="40" y="420" width="720" height="1" fill="#E0E0E0"/>
-            <rect x="70" y="436" width="580" height="32" rx="16" fill="white" stroke="#E0E0E0" stroke-width="1"/>
-            <circle cx="700" cy="452" r="16" fill="#00B4A0"/>
-            <polygon points="694,448 710,452 694,456" fill="white"/>
-          </svg>
-        </div>
+        <img src="assets/images/hero-chat.png" alt="Tealus チャット画面" class="hero-img">
       </div>
     </div>
     <svg class="hero-wave" viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
@@ -138,7 +103,7 @@
       </div>
       <div class="usecases-grid">
         <div class="usecase-card">
-          <div class="usecase-icon">🏗️</div>
+          <img src="assets/images/uc-construction.png" alt="現場で AI に音声で指示" class="usecase-img">
           <h3>現場で AI に音声で指示</h3>
           <p>建設現場や倉庫で、手が塞がっていてもトランシーバーで AI に質問。音声で回答が返ってくる。スマホを触らずに情報を得られる。</p>
           <div class="usecase-tags">
@@ -148,7 +113,7 @@
           </div>
         </div>
         <div class="usecase-card">
-          <div class="usecase-icon">💰</div>
+          <img src="assets/images/uc-cost.png" alt="Slack 月5万円 → ゼロ円に" class="usecase-img">
           <h3>Slack 月5万円 → ゼロ円に</h3>
           <p>50人で Slack 月5万円、Teams 月3万円。Tealus なら NAS 1台で月額ゼロ円。チャット、通話、AI まで全部入り。データも社外に出ない。</p>
           <div class="usecase-tags">
@@ -158,7 +123,7 @@
           </div>
         </div>
         <div class="usecase-card">
-          <div class="usecase-icon">💻</div>
+          <img src="assets/images/uc-developer.png" alt="開発中に AI が声で報告" class="usecase-img">
           <h3>開発中に AI が声で報告</h3>
           <p>Claude Code でコーディング中、タスク完了やエラーがトランシーバーから音声で届く。AI がチームメイトのように隣で話しかけてくれる感覚。</p>
           <div class="usecase-tags">
@@ -227,39 +192,7 @@
           </ul>
         </div>
         <div class="capabilities-visual">
-          <svg viewBox="0 0 400 360" xmlns="http://www.w3.org/2000/svg">
-            <!-- Phone frame -->
-            <rect x="80" y="10" width="240" height="340" rx="24" fill="white" stroke="#E0E0E0" stroke-width="1.5"/>
-            <!-- Status bar -->
-            <rect x="80" y="10" width="240" height="40" rx="24" fill="#00B4A0"/>
-            <rect x="80" y="40" width="240" height="10" fill="#00B4A0"/>
-            <text x="200" y="35" font-size="12" fill="white" font-family="sans-serif" text-anchor="middle">グループチャット</text>
-            <!-- Messages -->
-            <rect x="100" y="65" width="140" height="36" rx="12" fill="#F0F4F3"/>
-            <text x="114" y="88" font-size="11" fill="#333" font-family="sans-serif">おはようございます</text>
-            <rect x="180" y="110" width="120" height="36" rx="12" fill="#00B4A0"/>
-            <text x="194" y="133" font-size="11" fill="white" font-family="sans-serif">おはよう！</text>
-            <!-- Read indicator -->
-            <text x="268" y="152" font-size="9" fill="#00B4A0" font-family="sans-serif">既読 3</text>
-            <!-- Reaction -->
-            <rect x="100" y="160" width="160" height="36" rx="12" fill="#F0F4F3"/>
-            <text x="114" y="183" font-size="11" fill="#333" font-family="sans-serif">会議の資料できた？</text>
-            <rect x="100" y="198" width="44" height="20" rx="10" fill="#FFF3E0" stroke="#FFB74D" stroke-width="1"/>
-            <text x="112" y="212" font-size="11" font-family="sans-serif">👍 2</text>
-            <!-- AI stamp -->
-            <rect x="100" y="230" width="120" height="50" rx="12" fill="#E8F5E9"/>
-            <rect x="100" y="225" width="24" height="14" rx="7" fill="#00B4A0"/>
-            <text x="105" y="235" font-size="8" fill="white" font-family="sans-serif">AI</text>
-            <text x="114" y="253" font-size="10" fill="#333" font-family="sans-serif">資料を確認中...</text>
-            <text x="114" y="268" font-size="10" fill="#333" font-family="sans-serif">3件見つかりました</text>
-            <!-- Input area -->
-            <rect x="80" y="300" width="240" height="50" rx="0" fill="#FAFAFA"/>
-            <rect x="80" y="300" width="240" height="1" fill="#E0E0E0"/>
-            <rect x="96" y="312" width="170" height="28" rx="14" fill="white" stroke="#E0E0E0" stroke-width="1"/>
-            <circle cx="288" cy="326" r="14" fill="#00B4A0"/>
-            <rect x="282" y="320" width="6" height="12" rx="3" fill="white"/>
-            <rect x="290" y="318" width="2" height="6" rx="1" fill="white" transform="rotate(30, 291, 321)"/>
-          </svg>
+          <img src="assets/images/chat-group.png" alt="グループチャット" class="capabilities-img">
         </div>
       </div>
     </div>
