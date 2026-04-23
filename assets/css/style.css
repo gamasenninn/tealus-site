@@ -229,6 +229,11 @@ img { max-width: 100%; height: auto; }
   line-height: 1.6;
 }
 
+.usecase-link {
+  text-align: center;
+  margin-top: 48px;
+}
+
 /* ===== Comparison ===== */
 .comparison {
   padding: 100px 0;
