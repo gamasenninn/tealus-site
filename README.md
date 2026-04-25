@@ -24,7 +24,7 @@ tealus-site/
 1. リポジトリの **Settings > Pages**:
    - Source: `Deploy from a branch`
    - Branch: `main` / `/ (root)`
-2. master に push すれば自動デプロイ。
+2. main に push すれば自動デプロイ。
 3. `CNAME` によりカスタムドメイン `tealus.dev` が反映される（DNS は別途設定済み前提）。
 
 ### DNS 設定（リファレンス）
@@ -57,7 +57,7 @@ npx serve .
 - `uc-*.png`: ユースケース別イメージ
 - `og-image.png`: OG タグ用画像
 
-スクリーンショット更新手順は [tealus 本体リポの seed-demo.js ヘッダー](https://github.com/gamasenninn/tealus/blob/master/server/scripts/seed-demo.js) 参照。
+スクリーンショット更新手順は [tealus 本体リポの seed-demo.js ヘッダー](https://github.com/gamasenninn/tealus/blob/main/server/scripts/seed-demo.js) 参照。
 
 ## 関連リポジトリ
 
