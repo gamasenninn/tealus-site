@@ -7,9 +7,13 @@
  *
  * controller の挙動:
  *   - top-left に固定 widget (▶ 再生 / 速度 / slide N/M 表示)
- *   - Bespoke の bespoke-marp-active class を MutationObserver で監視
+ *   - URL hash (#N) を主検出法、class 系を fallback に slide 切替を検知
  *   - active slide が変わったら対応 audio を再生
- *   - audio ended で ArrowRight key event を dispatch → 次 slide へ
+ *   - audio ended で次 slide へ自動進行
+ *
+ * Debug:
+ *   ?debug クエリパラメータを付けると console.log が有効になる
+ *   例: /pitch/deck.html?debug
  */
 
 const fs = require('fs');
@@ -19,7 +23,6 @@ const DECK = path.join(__dirname, '..', 'pitch', 'deck.html');
 const MARKER_BEGIN = '<!-- NARRATION-CONTROLLER:BEGIN -->';
 const MARKER_END = '<!-- NARRATION-CONTROLLER:END -->';
 
-// audio ファイル数を narration.json から取得
 const NARRATION = path.join(__dirname, '..', 'pitch', 'audio', 'narration.json');
 const TOTAL = JSON.parse(fs.readFileSync(NARRATION, 'utf8')).slides.length;
 
@@ -47,7 +50,6 @@ const PAYLOAD = `${MARKER_BEGIN}
 </style>
 <div id="narration-controls" data-state="off">
   <button id="nar-toggle" title="ナレーション再生/停止">▶ ナレーション</button>
-  <button id="nar-bgm" data-state="off" title="BGM オン/オフ">🔇 BGM</button>
   <label>速度
     <select id="nar-speed">
       <option value="0.9">0.9x</option>
@@ -62,9 +64,13 @@ const PAYLOAD = `${MARKER_BEGIN}
 <script>
 (function () {
   var TOTAL = ${TOTAL};
-  var BGM_VOLUME = 0.7;
+  var DEBUG = (window.location.search || '').indexOf('debug') >= 0;
+  function dbg() {
+    if (!DEBUG) return;
+    try { console.log.apply(console, arguments); } catch (e) {}
+  }
+
   var sharedAudio = null;
-  var bgm = null;
   var currentIdx = -1;
   var enabled = false;
   var autoAdvance = true;
@@ -73,72 +79,11 @@ const PAYLOAD = `${MARKER_BEGIN}
   var status = document.getElementById('nar-status');
   var box = document.getElementById('narration-controls');
 
-  function ensureBgm() {
-    if (bgm) return bgm;
-    bgm = new Audio('audio/bgm.mp3');
-    bgm.loop = true;
-    bgm.volume = BGM_VOLUME;
-    return bgm;
-  }
+  function setStatus(text) { status.textContent = text; }
 
   function getSlides() {
-    // Marpit が付ける data-marpit-pagination 属性で本物の slide section だけ取得
     return document.querySelectorAll('section[data-marpit-pagination]');
   }
-
-  function manualNext() {
-    var slides = getSlides();
-    if (slides.length === 0) {
-      setStatus('manual: no slides found');
-      return false;
-    }
-    // bespoke-marp-active を持つ slide を探す
-    var i = -1;
-    for (var k = 0; k < slides.length; k++) {
-      if (slides[k].classList.contains('bespoke-marp-active')) { i = k; break; }
-    }
-    // 見つからない場合 (Bespoke が transition 中で剥がしっぱなし等) は
-    // currentIdx を信用して次へ
-    if (i < 0) {
-      i = currentIdx >= 0 ? currentIdx : 0;
-      setStatus('manual: no class, using idx ' + (i + 1));
-    }
-    if (i >= slides.length - 1) {
-      setStatus('manual: at last slide');
-      return false;
-    }
-    setStatus('manual: ' + (i + 1) + ' -> ' + (i + 2));
-    // 全 slide の active 系 class を一旦クリア (transition 中の状態を強制リセット)
-    for (var m = 0; m < slides.length; m++) {
-      slides[m].classList.remove('bespoke-marp-active', 'bespoke-marp-active-ready');
-      slides[m].classList.add('bespoke-marp-inactive');
-    }
-    // 次の slide を active に
-    slides[i + 1].classList.remove('bespoke-marp-inactive');
-    slides[i + 1].classList.add('bespoke-marp-active');
-    setTimeout(function () {
-      slides[i + 1].classList.add('bespoke-marp-active-ready');
-    }, 50);
-    return true;
-  }
-
-  function advanceSlide() {
-    var prev = currentIdx;
-    setStatus('slide ' + (prev + 1) + ': advancing');
-    document.dispatchEvent(new KeyboardEvent('keydown', {
-      key: 'ArrowRight', code: 'ArrowRight', keyCode: 39, which: 39,
-      bubbles: true, cancelable: true,
-    }));
-    setTimeout(function () {
-      if (currentIdx === prev) {
-        setStatus('slide ' + (prev + 1) + ': fallback (kbd ignored)');
-        var ok = manualNext();
-        if (!ok) setStatus('slide ' + (prev + 1) + ': manual failed');
-      }
-    }, 600);
-  }
-
-  function setStatus(text) { status.textContent = text; }
 
   function getSharedAudio() {
     if (sharedAudio) return sharedAudio;
@@ -199,19 +144,51 @@ const PAYLOAD = `${MARKER_BEGIN}
     a.load();
   }
 
+  function manualNext() {
+    var slides = getSlides();
+    if (slides.length === 0) return false;
+    var i = -1;
+    for (var k = 0; k < slides.length; k++) {
+      if (slides[k].classList.contains('bespoke-marp-active')) { i = k; break; }
+    }
+    if (i < 0) i = currentIdx >= 0 ? currentIdx : 0;
+    if (i >= slides.length - 1) return false;
+    for (var m = 0; m < slides.length; m++) {
+      slides[m].classList.remove('bespoke-marp-active', 'bespoke-marp-active-ready');
+      slides[m].classList.add('bespoke-marp-inactive');
+    }
+    slides[i + 1].classList.remove('bespoke-marp-inactive');
+    slides[i + 1].classList.add('bespoke-marp-active');
+    setTimeout(function () {
+      slides[i + 1].classList.add('bespoke-marp-active-ready');
+    }, 50);
+    return true;
+  }
+
+  function advanceSlide() {
+    var prev = currentIdx;
+    document.dispatchEvent(new KeyboardEvent('keydown', {
+      key: 'ArrowRight', code: 'ArrowRight', keyCode: 39, which: 39,
+      bubbles: true, cancelable: true,
+    }));
+    setTimeout(function () {
+      if (currentIdx === prev) manualNext();
+    }, 600);
+  }
+
   function updateStatus() {
-    status.textContent = 'slide ' + (currentIdx + 1) + ' / ' + TOTAL;
+    setStatus('slide ' + (currentIdx + 1) + ' / ' + TOTAL);
   }
 
   function findActiveByMethod() {
     var slides = getSlides();
-    // Method C を最優先 (Bespoke は class でなく URL hash で active 表現)
+    // Method C を最優先 (Marp bespoke-hash plugin が URL hash を更新)
     var hashMatch = (window.location.hash || '').match(/^#(\\d+)$/);
     if (hashMatch) {
       var hi = parseInt(hashMatch[1], 10) - 1;
       if (hi >= 0 && hi < slides.length) return { idx: hi, method: 'C' };
     }
-    // 以下は fallback (class 経由は実質使われていないが念のため残す)
+    // Fallback: class 系 (実質使われていないが念のため)
     for (var i = 0; i < slides.length; i++) {
       if (slides[i].classList.contains('bespoke-marp-active')) return { idx: i, method: 'A' };
     }
@@ -227,22 +204,19 @@ const PAYLOAD = `${MARKER_BEGIN}
   function checkActive() {
     var found = findActiveByMethod();
     if (!found) {
-      try { console.log('[narration] checkActive: no method found, hash=' + window.location.hash); } catch (e) {}
+      dbg('[narration] checkActive: no method found, hash=' + window.location.hash);
       return;
     }
     if (found.idx !== currentIdx) {
       var prev = currentIdx;
       currentIdx = found.idx;
       updateStatus();
-      try { console.log('[narration] slide', currentIdx + 1, 'detected via method', found.method, '(was', prev + 1, ')'); } catch (e) {}
+      dbg('[narration] slide', currentIdx + 1, 'detected via method', found.method, '(was', prev + 1, ')');
       playForCurrent();
     }
   }
 
   function setupObserver() {
-    // 個別 section に attach すると Bespoke が DOM 操作した場合に
-    // 観測対象が外れる可能性。document.body の subtree を観測することで
-    // section の class 変更を確実に拾う
     var observer = new MutationObserver(checkActive);
     observer.observe(document.body, {
       attributes: true,
@@ -251,7 +225,6 @@ const PAYLOAD = `${MARKER_BEGIN}
     });
     checkActive();
 
-    // 防御 1: ユーザの手動 nav (矢印 / PageDown / Space / Home / End / Esc 後の click)
     document.addEventListener('keydown', function (e) {
       var navKeys = [37, 38, 39, 40, 33, 34, 32, 36, 35, 13, 27];
       if (navKeys.indexOf(e.keyCode) >= 0) {
@@ -264,18 +237,14 @@ const PAYLOAD = `${MARKER_BEGIN}
       setTimeout(checkActive, 100);
       setTimeout(checkActive, 500);
     }, true);
-
-    // 防御 2: URL hash 変化を直接監視 (Marp bespoke-hash plugin が更新)
     window.addEventListener('hashchange', function () {
       setTimeout(checkActive, 50);
     });
-
-    // 防御 3: 300ms ごとの polling (narration 有効時のみ、hash 変化を確実に拾う)
     setInterval(function () {
       if (enabled) checkActive();
     }, 300);
 
-    try { console.log('[narration] setupObserver done. hashchange + 300ms polling enabled. initial hash=' + window.location.hash); } catch (e) {}
+    dbg('[narration] setupObserver done. hash polling 300ms. initial hash=' + window.location.hash);
   }
 
   toggle.addEventListener('click', function () {
@@ -283,42 +252,20 @@ const PAYLOAD = `${MARKER_BEGIN}
     toggle.textContent = enabled ? '⏸ ナレーション停止' : '▶ ナレーション';
     box.dataset.state = enabled ? 'on' : 'off';
     if (enabled) {
-      // Bespoke 初期化前なら slide 0 で起動
       checkActive();
       if (currentIdx < 0) { currentIdx = 0; updateStatus(); }
-      // BGM は明示 OFF (user 集中フェーズ)。🎵 ボタンで明示 ON 時のみ再生
       playForCurrent();
     } else {
       pauseAll();
-      if (bgm) bgm.pause();
     }
   });
-
-  var bgmToggle = document.getElementById('nar-bgm');
-  if (bgmToggle) {
-    bgmToggle.addEventListener('click', function () {
-      var b = ensureBgm();
-      if (b.paused || b.muted) {
-        b.muted = false;
-        if (enabled && b.paused) { var p = b.play(); if (p && p.catch) p.catch(function () {}); }
-        bgmToggle.dataset.state = 'on';
-        bgmToggle.textContent = '🎵 BGM';
-      } else {
-        b.muted = true;
-        bgmToggle.dataset.state = 'off';
-        bgmToggle.textContent = '🔇 BGM';
-      }
-    });
-  }
 
   speed.addEventListener('change', function () {
     if (sharedAudio) sharedAudio.playbackRate = parseFloat(speed.value);
   });
 
-  // Bespoke が active class を付けるまで少し時間がかかるため、
-  // DOMContentLoaded + 微小 delay で setup
   function boot() {
-    try { console.log('[narration] boot starting'); } catch (e) {}
+    dbg('[narration] boot starting (DEBUG=' + DEBUG + ')');
     setTimeout(setupObserver, 100);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
