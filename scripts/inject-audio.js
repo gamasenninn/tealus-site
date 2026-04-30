@@ -62,8 +62,8 @@ const PAYLOAD = `${MARKER_BEGIN}
 <script>
 (function () {
   var TOTAL = ${TOTAL};
-  var BGM_VOLUME = 0.5;
-  var audios = {};
+  var BGM_VOLUME = 0.7;
+  var sharedAudio = null;
   var bgm = null;
   var currentIdx = -1;
   var enabled = false;
@@ -111,36 +111,40 @@ const PAYLOAD = `${MARKER_BEGIN}
     }, 300);
   }
 
-  function audioFor(idx) {
-    if (audios[idx]) return audios[idx];
-    var num = ('00' + (idx + 1)).slice(-2);
-    var a = new Audio('audio/slide-' + num + '.mp3');
-    a.preload = 'metadata';
-    a.addEventListener('ended', function () {
+  // shared Audio: 51 個別 Audio だと slide 2 以降で autoplay block されるため、
+  // 1 つの Audio オブジェクトの src を切替えて使い回す。最初の play() (user gesture)
+  // で unlock され、以後の src 切替後の play() も同じ element として許可される。
+  function getSharedAudio() {
+    if (sharedAudio) return sharedAudio;
+    sharedAudio = new Audio();
+    sharedAudio.addEventListener('ended', function () {
       if (autoAdvance && enabled) advanceSlide();
     });
-    a.addEventListener('error', function () {
-      status.textContent = 'audio err: slide ' + (idx + 1);
+    sharedAudio.addEventListener('error', function () {
+      status.textContent = 'audio err: slide ' + (currentIdx + 1);
     });
-    audios[idx] = a;
-    return a;
+    return sharedAudio;
   }
 
   function pauseAll() {
-    Object.keys(audios).forEach(function (k) {
-      var a = audios[k]; a.pause(); a.currentTime = 0;
-    });
+    if (sharedAudio) { sharedAudio.pause(); sharedAudio.currentTime = 0; }
   }
 
   function playForCurrent() {
-    pauseAll();
     if (!enabled) return;
     var idx = currentIdx >= 0 ? currentIdx : 0;
-    var a = audioFor(idx);
+    var a = getSharedAudio();
+    var num = ('00' + (idx + 1)).slice(-2);
+    var newSrc = 'audio/slide-' + num + '.mp3';
+    // 同じ src なら src 切替で metadata 再ロードが起きないように
+    if (!a.src || a.src.indexOf(newSrc) === -1) {
+      a.src = newSrc;
+    }
+    a.currentTime = 0;
     a.playbackRate = parseFloat(speed.value);
     var p = a.play();
     if (p && p.catch) p.catch(function (err) {
-      status.textContent = 'play err: ' + (err.name || 'unknown');
+      status.textContent = 'play err: ' + (err.name || err.message || 'unknown');
     });
   }
 
@@ -209,9 +213,7 @@ const PAYLOAD = `${MARKER_BEGIN}
   }
 
   speed.addEventListener('change', function () {
-    Object.keys(audios).forEach(function (k) {
-      audios[k].playbackRate = parseFloat(speed.value);
-    });
+    if (sharedAudio) sharedAudio.playbackRate = parseFloat(speed.value);
   });
 
   // Bespoke が active class を付けるまで少し時間がかかるため、
