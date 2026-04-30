@@ -94,6 +94,9 @@ const PAYLOAD = `${MARKER_BEGIN}
         }));
       }
     });
+    a.addEventListener('error', function () {
+      status.textContent = 'audio err: slide ' + (idx + 1);
+    });
     audios[idx] = a;
     return a;
   }
@@ -106,11 +109,14 @@ const PAYLOAD = `${MARKER_BEGIN}
 
   function playForCurrent() {
     pauseAll();
-    if (!enabled || currentIdx < 0) return;
-    var a = audioFor(currentIdx);
+    if (!enabled) return;
+    var idx = currentIdx >= 0 ? currentIdx : 0;
+    var a = audioFor(idx);
     a.playbackRate = parseFloat(speed.value);
     var p = a.play();
-    if (p && p.catch) p.catch(function () { /* autoplay block, ignore */ });
+    if (p && p.catch) p.catch(function (err) {
+      status.textContent = 'play err: ' + (err.name || 'unknown');
+    });
   }
 
   function updateStatus() {
@@ -145,9 +151,14 @@ const PAYLOAD = `${MARKER_BEGIN}
     toggle.textContent = enabled ? '⏸ ナレーション停止' : '▶ ナレーション';
     box.dataset.state = enabled ? 'on' : 'off';
     if (enabled) {
+      // Bespoke が初期化前なら slide 0 で起動
+      checkActive();
+      if (currentIdx < 0) { currentIdx = 0; updateStatus(); }
       var b = ensureBgm();
       var p = b.play();
-      if (p && p.catch) p.catch(function () { /* autoplay block */ });
+      if (p && p.catch) p.catch(function (err) {
+        status.textContent = 'bgm err: ' + (err.name || 'unknown');
+      });
       playForCurrent();
     } else {
       pauseAll();
