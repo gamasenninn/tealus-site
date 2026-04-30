@@ -88,21 +88,32 @@ const PAYLOAD = `${MARKER_BEGIN}
 
   function manualNext() {
     var slides = getSlides();
+    if (slides.length === 0) {
+      setStatus('manual: no slides found');
+      return false;
+    }
+    // bespoke-marp-active を持つ slide を探す
     var i = -1;
     for (var k = 0; k < slides.length; k++) {
       if (slides[k].classList.contains('bespoke-marp-active')) { i = k; break; }
     }
+    // 見つからない場合 (Bespoke が transition 中で剥がしっぱなし等) は
+    // currentIdx を信用して次へ
     if (i < 0) {
-      setStatus('manual: no current active');
-      return false;
+      i = currentIdx >= 0 ? currentIdx : 0;
+      setStatus('manual: no class, using idx ' + (i + 1));
     }
     if (i >= slides.length - 1) {
       setStatus('manual: at last slide');
       return false;
     }
     setStatus('manual: ' + (i + 1) + ' -> ' + (i + 2));
-    slides[i].classList.remove('bespoke-marp-active', 'bespoke-marp-active-ready');
-    slides[i].classList.add('bespoke-marp-inactive');
+    // 全 slide の active 系 class を一旦クリア (transition 中の状態を強制リセット)
+    for (var m = 0; m < slides.length; m++) {
+      slides[m].classList.remove('bespoke-marp-active', 'bespoke-marp-active-ready');
+      slides[m].classList.add('bespoke-marp-inactive');
+    }
+    // 次の slide を active に
     slides[i + 1].classList.remove('bespoke-marp-inactive');
     slides[i + 1].classList.add('bespoke-marp-active');
     setTimeout(function () {
@@ -124,7 +135,7 @@ const PAYLOAD = `${MARKER_BEGIN}
         var ok = manualNext();
         if (!ok) setStatus('slide ' + (prev + 1) + ': manual failed');
       }
-    }, 300);
+    }, 600);
   }
 
   function setStatus(text) { status.textContent = text; }
