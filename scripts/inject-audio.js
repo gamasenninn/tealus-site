@@ -81,13 +81,26 @@ const PAYLOAD = `${MARKER_BEGIN}
     return bgm;
   }
 
+  function getSlides() {
+    // Marpit が付ける data-marpit-pagination 属性で本物の slide section だけ取得
+    return document.querySelectorAll('section[data-marpit-pagination]');
+  }
+
   function manualNext() {
-    var slides = document.querySelectorAll('section');
+    var slides = getSlides();
     var i = -1;
     for (var k = 0; k < slides.length; k++) {
       if (slides[k].classList.contains('bespoke-marp-active')) { i = k; break; }
     }
-    if (i < 0 || i >= slides.length - 1) return false;
+    if (i < 0) {
+      setStatus('manual: no current active');
+      return false;
+    }
+    if (i >= slides.length - 1) {
+      setStatus('manual: at last slide');
+      return false;
+    }
+    setStatus('manual: ' + (i + 1) + ' -> ' + (i + 2));
     slides[i].classList.remove('bespoke-marp-active', 'bespoke-marp-active-ready');
     slides[i].classList.add('bespoke-marp-inactive');
     slides[i + 1].classList.remove('bespoke-marp-inactive');
@@ -100,14 +113,17 @@ const PAYLOAD = `${MARKER_BEGIN}
 
   function advanceSlide() {
     var prev = currentIdx;
-    // 1) Bespoke の keys plugin 経由 (document 上で listen)
+    setStatus('slide ' + (prev + 1) + ': advancing');
     document.dispatchEvent(new KeyboardEvent('keydown', {
       key: 'ArrowRight', code: 'ArrowRight', keyCode: 39, which: 39,
       bubbles: true, cancelable: true,
     }));
-    // 2) 300ms 待って変化がなければ class 直接操作で fallback
     setTimeout(function () {
-      if (currentIdx === prev) manualNext();
+      if (currentIdx === prev) {
+        setStatus('slide ' + (prev + 1) + ': fallback (kbd ignored)');
+        var ok = manualNext();
+        if (!ok) setStatus('slide ' + (prev + 1) + ': manual failed');
+      }
     }, 300);
   }
 
@@ -176,7 +192,7 @@ const PAYLOAD = `${MARKER_BEGIN}
   }
 
   function checkActive() {
-    var slides = document.querySelectorAll('section');
+    var slides = getSlides();
     for (var i = 0; i < slides.length; i++) {
       if (slides[i].classList.contains('bespoke-marp-active')) {
         if (i !== currentIdx) {
