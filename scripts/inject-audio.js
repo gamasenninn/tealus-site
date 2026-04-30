@@ -205,21 +205,19 @@ const PAYLOAD = `${MARKER_BEGIN}
 
   function findActiveByMethod() {
     var slides = getSlides();
-    // Method A: bespoke-marp-active class
-    for (var i = 0; i < slides.length; i++) {
-      if (slides[i].classList.contains('bespoke-marp-active')) return { idx: i, method: 'A' };
-    }
-    // Method B: bespoke-marp-active-ready (transition 中で active 剥がれたケース)
-    for (var i = 0; i < slides.length; i++) {
-      if (slides[i].classList.contains('bespoke-marp-active-ready')) return { idx: i, method: 'B' };
-    }
-    // Method C: URL hash (Marp bespoke-hash plugin、#1 ~ #N)
+    // Method C を最優先 (Bespoke は class でなく URL hash で active 表現)
     var hashMatch = (window.location.hash || '').match(/^#(\d+)$/);
     if (hashMatch) {
       var hi = parseInt(hashMatch[1], 10) - 1;
       if (hi >= 0 && hi < slides.length) return { idx: hi, method: 'C' };
     }
-    // Method D: aria-hidden=false の section (一部 Bespoke 設定)
+    // 以下は fallback (class 経由は実質使われていないが念のため残す)
+    for (var i = 0; i < slides.length; i++) {
+      if (slides[i].classList.contains('bespoke-marp-active')) return { idx: i, method: 'A' };
+    }
+    for (var i = 0; i < slides.length; i++) {
+      if (slides[i].classList.contains('bespoke-marp-active-ready')) return { idx: i, method: 'B' };
+    }
     for (var i = 0; i < slides.length; i++) {
       if (slides[i].getAttribute('aria-hidden') === 'false') return { idx: i, method: 'D' };
     }
@@ -228,11 +226,15 @@ const PAYLOAD = `${MARKER_BEGIN}
 
   function checkActive() {
     var found = findActiveByMethod();
-    if (!found) return;
+    if (!found) {
+      try { console.log('[narration] checkActive: no method found, hash=' + window.location.hash); } catch (e) {}
+      return;
+    }
     if (found.idx !== currentIdx) {
+      var prev = currentIdx;
       currentIdx = found.idx;
       updateStatus();
-      try { console.log('[narration] slide', found.idx + 1, 'detected via method', found.method); } catch (e) {}
+      try { console.log('[narration] slide', currentIdx + 1, 'detected via method', found.method, '(was', prev + 1, ')'); } catch (e) {}
       playForCurrent();
     }
   }
@@ -268,10 +270,12 @@ const PAYLOAD = `${MARKER_BEGIN}
       setTimeout(checkActive, 50);
     });
 
-    // 防御 3: 500ms ごとの polling fallback (narration 有効時のみ)
+    // 防御 3: 300ms ごとの polling (narration 有効時のみ、hash 変化を確実に拾う)
     setInterval(function () {
       if (enabled) checkActive();
-    }, 500);
+    }, 300);
+
+    try { console.log('[narration] setupObserver done. hashchange + 300ms polling enabled. initial hash=' + window.location.hash); } catch (e) {}
   }
 
   toggle.addEventListener('click', function () {
@@ -313,7 +317,10 @@ const PAYLOAD = `${MARKER_BEGIN}
 
   // Bespoke が active class を付けるまで少し時間がかかるため、
   // DOMContentLoaded + 微小 delay で setup
-  function boot() { setTimeout(setupObserver, 100); }
+  function boot() {
+    try { console.log('[narration] boot starting'); } catch (e) {}
+    setTimeout(setupObserver, 100);
+  }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
 })();
