@@ -1,2 +1,6 @@
 .DS_Store
 Thumbs.db
+
+# Claude Code MCP project-local config (実運用版、example はコミット)
+.mcp.json
+.claude/settings.local.json

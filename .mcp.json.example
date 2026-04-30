@@ -1,0 +1,18 @@
+{
+  "_comment": "Tealus MCP server config (project-local). 実運用時は .mcp.json として配置 (.gitignore 済)。BOT 認証情報は本番環境では強い password に変更すること。",
+  "mcpServers": {
+    "tealus": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "github:gamasenninn/tealus-mcp"
+      ],
+      "env": {
+        "TEALUS_API_URL": "http://localhost:3000",
+        "TEALUS_USER_ID": "BOT001",
+        "TEALUS_PASSWORD": "REPLACE_WITH_REAL_PASSWORD"
+      }
+    }
+  }
+}
