@@ -62,7 +62,7 @@ const PAYLOAD = `${MARKER_BEGIN}
 <script>
 (function () {
   var TOTAL = ${TOTAL};
-  var BGM_VOLUME = 0.15;
+  var BGM_VOLUME = 0.5;
   var audios = {};
   var bgm = null;
   var currentIdx = -1;
@@ -81,18 +81,43 @@ const PAYLOAD = `${MARKER_BEGIN}
     return bgm;
   }
 
+  function manualNext() {
+    var slides = document.querySelectorAll('section');
+    var i = -1;
+    for (var k = 0; k < slides.length; k++) {
+      if (slides[k].classList.contains('bespoke-marp-active')) { i = k; break; }
+    }
+    if (i < 0 || i >= slides.length - 1) return false;
+    slides[i].classList.remove('bespoke-marp-active', 'bespoke-marp-active-ready');
+    slides[i].classList.add('bespoke-marp-inactive');
+    slides[i + 1].classList.remove('bespoke-marp-inactive');
+    slides[i + 1].classList.add('bespoke-marp-active');
+    setTimeout(function () {
+      slides[i + 1].classList.add('bespoke-marp-active-ready');
+    }, 50);
+    return true;
+  }
+
+  function advanceSlide() {
+    var prev = currentIdx;
+    // 1) Bespoke の keys plugin 経由 (document 上で listen)
+    document.dispatchEvent(new KeyboardEvent('keydown', {
+      key: 'ArrowRight', code: 'ArrowRight', keyCode: 39, which: 39,
+      bubbles: true, cancelable: true,
+    }));
+    // 2) 300ms 待って変化がなければ class 直接操作で fallback
+    setTimeout(function () {
+      if (currentIdx === prev) manualNext();
+    }, 300);
+  }
+
   function audioFor(idx) {
     if (audios[idx]) return audios[idx];
     var num = ('00' + (idx + 1)).slice(-2);
     var a = new Audio('audio/slide-' + num + '.mp3');
     a.preload = 'metadata';
     a.addEventListener('ended', function () {
-      if (autoAdvance && enabled) {
-        window.dispatchEvent(new KeyboardEvent('keydown', {
-          key: 'ArrowRight', code: 'ArrowRight', keyCode: 39, which: 39,
-          bubbles: true, cancelable: true,
-        }));
-      }
+      if (autoAdvance && enabled) advanceSlide();
     });
     a.addEventListener('error', function () {
       status.textContent = 'audio err: slide ' + (idx + 1);
