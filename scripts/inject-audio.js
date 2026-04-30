@@ -47,6 +47,7 @@ const PAYLOAD = `${MARKER_BEGIN}
 </style>
 <div id="narration-controls" data-state="off">
   <button id="nar-toggle" title="ナレーション再生/停止">▶ ナレーション</button>
+  <button id="nar-bgm" data-state="on" title="BGM オン/オフ">🎵 BGM</button>
   <label>速度
     <select id="nar-speed">
       <option value="0.9">0.9x</option>
@@ -61,7 +62,9 @@ const PAYLOAD = `${MARKER_BEGIN}
 <script>
 (function () {
   var TOTAL = ${TOTAL};
+  var BGM_VOLUME = 0.15;
   var audios = {};
+  var bgm = null;
   var currentIdx = -1;
   var enabled = false;
   var autoAdvance = true;
@@ -69,6 +72,14 @@ const PAYLOAD = `${MARKER_BEGIN}
   var speed = document.getElementById('nar-speed');
   var status = document.getElementById('nar-status');
   var box = document.getElementById('narration-controls');
+
+  function ensureBgm() {
+    if (bgm) return bgm;
+    bgm = new Audio('audio/bgm.mp3');
+    bgm.loop = true;
+    bgm.volume = BGM_VOLUME;
+    return bgm;
+  }
 
   function audioFor(idx) {
     if (audios[idx]) return audios[idx];
@@ -133,8 +144,33 @@ const PAYLOAD = `${MARKER_BEGIN}
     enabled = !enabled;
     toggle.textContent = enabled ? '⏸ ナレーション停止' : '▶ ナレーション';
     box.dataset.state = enabled ? 'on' : 'off';
-    if (enabled) playForCurrent(); else pauseAll();
+    if (enabled) {
+      var b = ensureBgm();
+      var p = b.play();
+      if (p && p.catch) p.catch(function () { /* autoplay block */ });
+      playForCurrent();
+    } else {
+      pauseAll();
+      if (bgm) bgm.pause();
+    }
   });
+
+  var bgmToggle = document.getElementById('nar-bgm');
+  if (bgmToggle) {
+    bgmToggle.addEventListener('click', function () {
+      var b = ensureBgm();
+      if (b.paused || b.muted) {
+        b.muted = false;
+        if (enabled && b.paused) { var p = b.play(); if (p && p.catch) p.catch(function () {}); }
+        bgmToggle.dataset.state = 'on';
+        bgmToggle.textContent = '🎵 BGM';
+      } else {
+        b.muted = true;
+        bgmToggle.dataset.state = 'off';
+        bgmToggle.textContent = '🔇 BGM';
+      }
+    });
+  }
 
   speed.addEventListener('change', function () {
     Object.keys(audios).forEach(function (k) {
