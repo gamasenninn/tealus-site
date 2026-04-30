@@ -979,6 +979,7 @@ Audience の関心軸 = 「自社で運用できる、AI 標準装備の messeng
 
   function playForCurrent() {
     if (!enabled) return;
+    pauseAll();
     var idx = currentIdx >= 0 ? currentIdx : 0;
     var a = getSharedAudio();
     var num = ('00' + (idx + 1)).slice(-2);
@@ -1047,6 +1048,27 @@ Audience の関心軸 = 「自社で運用できる、AI 標準装備の messeng
       subtree: true,
     });
     checkActive();
+
+    // 防御 1: ユーザの手動 nav (矢印 / PageDown / Space / Home / End / Esc 後の click)
+    // でも observer が取りこぼした場合に備え、複数 delay で再 check
+    document.addEventListener('keydown', function (e) {
+      var navKeys = [37, 38, 39, 40, 33, 34, 32, 36, 35, 13, 27];
+      if (navKeys.indexOf(e.keyCode) >= 0) {
+        setTimeout(checkActive, 100);
+        setTimeout(checkActive, 400);
+        setTimeout(checkActive, 900);
+      }
+    }, true);
+    // overview (grid view) 内のクリックでも反応
+    document.addEventListener('click', function () {
+      setTimeout(checkActive, 100);
+      setTimeout(checkActive, 500);
+    }, true);
+
+    // 防御 2: 1 秒ごとの polling fallback (narration 有効時のみ)
+    setInterval(function () {
+      if (enabled) checkActive();
+    }, 1000);
   }
 
   toggle.addEventListener('click', function () {
