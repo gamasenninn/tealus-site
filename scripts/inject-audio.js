@@ -206,7 +206,7 @@ const PAYLOAD = `${MARKER_BEGIN}
   function findActiveByMethod() {
     var slides = getSlides();
     // Method C を最優先 (Bespoke は class でなく URL hash で active 表現)
-    var hashMatch = (window.location.hash || '').match(/^#(\d+)$/);
+    var hashMatch = (window.location.hash || '').match(/^#(\\d+)$/);
     if (hashMatch) {
       var hi = parseInt(hashMatch[1], 10) - 1;
       if (hi >= 0 && hi < slides.length) return { idx: hi, method: 'C' };
