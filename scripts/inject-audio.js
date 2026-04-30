@@ -203,17 +203,37 @@ const PAYLOAD = `${MARKER_BEGIN}
     status.textContent = 'slide ' + (currentIdx + 1) + ' / ' + TOTAL;
   }
 
-  function checkActive() {
+  function findActiveByMethod() {
     var slides = getSlides();
+    // Method A: bespoke-marp-active class
     for (var i = 0; i < slides.length; i++) {
-      if (slides[i].classList.contains('bespoke-marp-active')) {
-        if (i !== currentIdx) {
-          currentIdx = i;
-          updateStatus();
-          playForCurrent();
-        }
-        return;
-      }
+      if (slides[i].classList.contains('bespoke-marp-active')) return { idx: i, method: 'A' };
+    }
+    // Method B: bespoke-marp-active-ready (transition 中で active 剥がれたケース)
+    for (var i = 0; i < slides.length; i++) {
+      if (slides[i].classList.contains('bespoke-marp-active-ready')) return { idx: i, method: 'B' };
+    }
+    // Method C: URL hash (Marp bespoke-hash plugin、#1 ~ #N)
+    var hashMatch = (window.location.hash || '').match(/^#(\d+)$/);
+    if (hashMatch) {
+      var hi = parseInt(hashMatch[1], 10) - 1;
+      if (hi >= 0 && hi < slides.length) return { idx: hi, method: 'C' };
+    }
+    // Method D: aria-hidden=false の section (一部 Bespoke 設定)
+    for (var i = 0; i < slides.length; i++) {
+      if (slides[i].getAttribute('aria-hidden') === 'false') return { idx: i, method: 'D' };
+    }
+    return null;
+  }
+
+  function checkActive() {
+    var found = findActiveByMethod();
+    if (!found) return;
+    if (found.idx !== currentIdx) {
+      currentIdx = found.idx;
+      updateStatus();
+      try { console.log('[narration] slide', found.idx + 1, 'detected via method', found.method); } catch (e) {}
+      playForCurrent();
     }
   }
 
@@ -230,7 +250,6 @@ const PAYLOAD = `${MARKER_BEGIN}
     checkActive();
 
     // 防御 1: ユーザの手動 nav (矢印 / PageDown / Space / Home / End / Esc 後の click)
-    // でも observer が取りこぼした場合に備え、複数 delay で再 check
     document.addEventListener('keydown', function (e) {
       var navKeys = [37, 38, 39, 40, 33, 34, 32, 36, 35, 13, 27];
       if (navKeys.indexOf(e.keyCode) >= 0) {
@@ -239,16 +258,20 @@ const PAYLOAD = `${MARKER_BEGIN}
         setTimeout(checkActive, 900);
       }
     }, true);
-    // overview (grid view) 内のクリックでも反応
     document.addEventListener('click', function () {
       setTimeout(checkActive, 100);
       setTimeout(checkActive, 500);
     }, true);
 
-    // 防御 2: 1 秒ごとの polling fallback (narration 有効時のみ)
+    // 防御 2: URL hash 変化を直接監視 (Marp bespoke-hash plugin が更新)
+    window.addEventListener('hashchange', function () {
+      setTimeout(checkActive, 50);
+    });
+
+    // 防御 3: 500ms ごとの polling fallback (narration 有効時のみ)
     setInterval(function () {
       if (enabled) checkActive();
-    }, 1000);
+    }, 500);
   }
 
   toggle.addEventListener('click', function () {
