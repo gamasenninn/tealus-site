@@ -4,3 +4,6 @@ Thumbs.db
 # Claude Code MCP project-local config (実運用版、example はコミット)
 .mcp.json
 .claude/settings.local.json
+
+# Pitch audio build 中間ファイル (Aivis WAV、ffmpeg 変換後に削除されるが保険)
+pitch/audio/*.wav.tmp

@@ -1,0 +1,173 @@
+#!/usr/bin/env node
+/**
+ * deck.html (Marp Bespoke 出力) に audio narration controller を注入する。
+ *
+ * - 既に注入済 (MARKER 検出) の場合は再 inject (置換) する → 冪等
+ * - 注入位置: </body> 直前
+ *
+ * controller の挙動:
+ *   - top-left に固定 widget (▶ 再生 / 速度 / slide N/M 表示)
+ *   - Bespoke の bespoke-marp-active class を MutationObserver で監視
+ *   - active slide が変わったら対応 audio を再生
+ *   - audio ended で ArrowRight key event を dispatch → 次 slide へ
+ */
+
+const fs = require('fs');
+const path = require('path');
+
+const DECK = path.join(__dirname, '..', 'pitch', 'deck.html');
+const MARKER_BEGIN = '<!-- NARRATION-CONTROLLER:BEGIN -->';
+const MARKER_END = '<!-- NARRATION-CONTROLLER:END -->';
+
+// audio ファイル数を narration.json から取得
+const NARRATION = path.join(__dirname, '..', 'pitch', 'audio', 'narration.json');
+const TOTAL = JSON.parse(fs.readFileSync(NARRATION, 'utf8')).slides.length;
+
+const PAYLOAD = `${MARKER_BEGIN}
+<style>
+  #narration-controls {
+    position: fixed; top: 10px; left: 10px; z-index: 10000;
+    background: rgba(0,0,0,0.72); color: #fff;
+    padding: 6px 10px; border-radius: 8px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 12px;
+    display: flex; gap: 8px; align-items: center;
+    backdrop-filter: blur(4px);
+    user-select: none;
+  }
+  #narration-controls button, #narration-controls select {
+    background: transparent; border: 1px solid rgba(255,255,255,0.35);
+    color: #fff; padding: 3px 9px; border-radius: 4px;
+    cursor: pointer; font-size: 12px;
+  }
+  #narration-controls button:hover { background: rgba(255,255,255,0.1); }
+  #narration-controls label { display: flex; gap: 3px; align-items: center; opacity: 0.85; }
+  #nar-status { opacity: 0.7; min-width: 70px; }
+  #narration-controls[data-state="on"] #nar-toggle { background: rgba(0, 180, 160, 0.4); }
+</style>
+<div id="narration-controls" data-state="off">
+  <button id="nar-toggle" title="ナレーション再生/停止">▶ ナレーション</button>
+  <label>速度
+    <select id="nar-speed">
+      <option value="0.9">0.9x</option>
+      <option value="1" selected>1x</option>
+      <option value="1.25">1.25x</option>
+      <option value="1.5">1.5x</option>
+      <option value="2">2x</option>
+    </select>
+  </label>
+  <span id="nar-status">slide 1 / ${TOTAL}</span>
+</div>
+<script>
+(function () {
+  var TOTAL = ${TOTAL};
+  var audios = {};
+  var currentIdx = -1;
+  var enabled = false;
+  var autoAdvance = true;
+  var toggle = document.getElementById('nar-toggle');
+  var speed = document.getElementById('nar-speed');
+  var status = document.getElementById('nar-status');
+  var box = document.getElementById('narration-controls');
+
+  function audioFor(idx) {
+    if (audios[idx]) return audios[idx];
+    var num = ('00' + (idx + 1)).slice(-2);
+    var a = new Audio('audio/slide-' + num + '.mp3');
+    a.preload = 'metadata';
+    a.addEventListener('ended', function () {
+      if (autoAdvance && enabled) {
+        window.dispatchEvent(new KeyboardEvent('keydown', {
+          key: 'ArrowRight', code: 'ArrowRight', keyCode: 39, which: 39,
+          bubbles: true, cancelable: true,
+        }));
+      }
+    });
+    audios[idx] = a;
+    return a;
+  }
+
+  function pauseAll() {
+    Object.keys(audios).forEach(function (k) {
+      var a = audios[k]; a.pause(); a.currentTime = 0;
+    });
+  }
+
+  function playForCurrent() {
+    pauseAll();
+    if (!enabled || currentIdx < 0) return;
+    var a = audioFor(currentIdx);
+    a.playbackRate = parseFloat(speed.value);
+    var p = a.play();
+    if (p && p.catch) p.catch(function () { /* autoplay block, ignore */ });
+  }
+
+  function updateStatus() {
+    status.textContent = 'slide ' + (currentIdx + 1) + ' / ' + TOTAL;
+  }
+
+  function checkActive() {
+    var slides = document.querySelectorAll('section');
+    for (var i = 0; i < slides.length; i++) {
+      if (slides[i].classList.contains('bespoke-marp-active')) {
+        if (i !== currentIdx) {
+          currentIdx = i;
+          updateStatus();
+          playForCurrent();
+        }
+        return;
+      }
+    }
+  }
+
+  function setupObserver() {
+    var slides = document.querySelectorAll('section');
+    var observer = new MutationObserver(checkActive);
+    slides.forEach(function (s) {
+      observer.observe(s, { attributes: true, attributeFilter: ['class'] });
+    });
+    checkActive();
+  }
+
+  toggle.addEventListener('click', function () {
+    enabled = !enabled;
+    toggle.textContent = enabled ? '⏸ ナレーション停止' : '▶ ナレーション';
+    box.dataset.state = enabled ? 'on' : 'off';
+    if (enabled) playForCurrent(); else pauseAll();
+  });
+
+  speed.addEventListener('change', function () {
+    Object.keys(audios).forEach(function (k) {
+      audios[k].playbackRate = parseFloat(speed.value);
+    });
+  });
+
+  // Bespoke が active class を付けるまで少し時間がかかるため、
+  // DOMContentLoaded + 微小 delay で setup
+  function boot() { setTimeout(setupObserver, 100); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+</script>
+${MARKER_END}`;
+
+function main() {
+  let html = fs.readFileSync(DECK, 'utf8');
+
+  // 既存注入があれば剥がす (冪等)
+  const re = new RegExp(MARKER_BEGIN + '[\\s\\S]*?' + MARKER_END, 'g');
+  html = html.replace(re, '');
+
+  // </body> 直前に挿入
+  const idx = html.lastIndexOf('</body>');
+  if (idx === -1) {
+    console.error('No </body> found in deck.html');
+    process.exit(1);
+  }
+  html = html.slice(0, idx) + PAYLOAD + html.slice(idx);
+
+  fs.writeFileSync(DECK, html);
+  console.log(`Injected narration controller (TOTAL=${TOTAL}) into deck.html`);
+}
+
+main();
