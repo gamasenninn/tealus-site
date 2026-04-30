@@ -47,7 +47,7 @@ const PAYLOAD = `${MARKER_BEGIN}
 </style>
 <div id="narration-controls" data-state="off">
   <button id="nar-toggle" title="ナレーション再生/停止">▶ ナレーション</button>
-  <button id="nar-bgm" data-state="on" title="BGM オン/オフ">🎵 BGM</button>
+  <button id="nar-bgm" data-state="off" title="BGM オン/オフ">🔇 BGM</button>
   <label>速度
     <select id="nar-speed">
       <option value="0.9">0.9x</option>
@@ -111,17 +111,17 @@ const PAYLOAD = `${MARKER_BEGIN}
     }, 300);
   }
 
-  // shared Audio: 51 個別 Audio だと slide 2 以降で autoplay block されるため、
-  // 1 つの Audio オブジェクトの src を切替えて使い回す。最初の play() (user gesture)
-  // で unlock され、以後の src 切替後の play() も同じ element として許可される。
+  function setStatus(text) { status.textContent = text; }
+
   function getSharedAudio() {
     if (sharedAudio) return sharedAudio;
     sharedAudio = new Audio();
     sharedAudio.addEventListener('ended', function () {
+      setStatus('slide ' + (currentIdx + 1) + ': ended');
       if (autoAdvance && enabled) advanceSlide();
     });
     sharedAudio.addEventListener('error', function () {
-      status.textContent = 'audio err: slide ' + (currentIdx + 1);
+      setStatus('load err: slide ' + (currentIdx + 1));
     });
     return sharedAudio;
   }
@@ -136,16 +136,39 @@ const PAYLOAD = `${MARKER_BEGIN}
     var a = getSharedAudio();
     var num = ('00' + (idx + 1)).slice(-2);
     var newSrc = 'audio/slide-' + num + '.mp3';
-    // 同じ src なら src 切替で metadata 再ロードが起きないように
-    if (!a.src || a.src.indexOf(newSrc) === -1) {
-      a.src = newSrc;
+    var sameSrc = a.src && a.src.indexOf(newSrc) !== -1;
+
+    function doPlay() {
+      a.currentTime = 0;
+      a.playbackRate = parseFloat(speed.value);
+      setStatus('slide ' + (idx + 1) + ': starting');
+      var p = a.play();
+      if (p && p.then) {
+        p.then(function () {
+          setStatus('slide ' + (idx + 1) + ': playing');
+        }).catch(function (err) {
+          setStatus('slide ' + (idx + 1) + ': play err ' + (err.name || 'unknown'));
+        });
+      }
     }
-    a.currentTime = 0;
-    a.playbackRate = parseFloat(speed.value);
-    var p = a.play();
-    if (p && p.catch) p.catch(function (err) {
-      status.textContent = 'play err: ' + (err.name || err.message || 'unknown');
-    });
+
+    if (sameSrc) { doPlay(); return; }
+
+    setStatus('slide ' + (idx + 1) + ': loading');
+    var onCanPlay = function () {
+      a.removeEventListener('canplay', onCanPlay);
+      a.removeEventListener('error', onErr);
+      doPlay();
+    };
+    var onErr = function () {
+      a.removeEventListener('canplay', onCanPlay);
+      a.removeEventListener('error', onErr);
+      setStatus('slide ' + (idx + 1) + ': load err');
+    };
+    a.addEventListener('canplay', onCanPlay);
+    a.addEventListener('error', onErr);
+    a.src = newSrc;
+    a.load();
   }
 
   function updateStatus() {
@@ -167,10 +190,14 @@ const PAYLOAD = `${MARKER_BEGIN}
   }
 
   function setupObserver() {
-    var slides = document.querySelectorAll('section');
+    // 個別 section に attach すると Bespoke が DOM 操作した場合に
+    // 観測対象が外れる可能性。document.body の subtree を観測することで
+    // section の class 変更を確実に拾う
     var observer = new MutationObserver(checkActive);
-    slides.forEach(function (s) {
-      observer.observe(s, { attributes: true, attributeFilter: ['class'] });
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ['class'],
+      subtree: true,
     });
     checkActive();
   }
@@ -180,14 +207,10 @@ const PAYLOAD = `${MARKER_BEGIN}
     toggle.textContent = enabled ? '⏸ ナレーション停止' : '▶ ナレーション';
     box.dataset.state = enabled ? 'on' : 'off';
     if (enabled) {
-      // Bespoke が初期化前なら slide 0 で起動
+      // Bespoke 初期化前なら slide 0 で起動
       checkActive();
       if (currentIdx < 0) { currentIdx = 0; updateStatus(); }
-      var b = ensureBgm();
-      var p = b.play();
-      if (p && p.catch) p.catch(function (err) {
-        status.textContent = 'bgm err: ' + (err.name || 'unknown');
-      });
+      // BGM は明示 OFF (user 集中フェーズ)。🎵 ボタンで明示 ON 時のみ再生
       playForCurrent();
     } else {
       pauseAll();
