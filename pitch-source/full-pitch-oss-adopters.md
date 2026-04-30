@@ -40,6 +40,19 @@ Audience の関心軸 = 「自社で運用できる、AI 標準装備の messeng
 
 ---
 
+## 今日のお話 (35 min)
+
+1. なぜ Tealus が必要か (5 min)
+2. Tealus の 4 つの設計柱 (5 min)
+3. **Demo** (10 min)
+4. アーキテクチャ (4 min)
+5. 競合比較 (3 min)
+6. 採用方法とコスト (4 min)
+7. Roadmap (2 min)
+8. 数字と透明性 (2 min)
+
+---
+
 # 1. なぜ Tealus が必要か
 
 ---
