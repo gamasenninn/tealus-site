@@ -379,9 +379,9 @@ npx -y github:gamasenninn/tealus-mcp
 
 | 項目 | 最低 | 推奨 |
 |---|---|---|
-| OS | Linux / Mac / NAS | NAS (Synology / QNAP) |
-| メモリ | 1 GB | 2-4 GB |
-| ディスク | 5 GB | 50 GB+ (メディア蓄積想定) |
+| OS | Linux / Mac mini / NAS | NAS (Synology / QNAP / UGREEN) |
+| メモリ | 4 GB | 8 GB 以上 |
+| ディスク | 50 GB | 1 TB 以上 (メディア蓄積想定) |
 | ネット | 100 Mbps | 1 Gbps |
 | API key | OpenAI (任意) | OpenAI + Aivis (TTS) |
 
