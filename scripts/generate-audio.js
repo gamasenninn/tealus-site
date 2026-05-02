@@ -2,15 +2,17 @@
 /**
  * narration.json を読んで Aivis Cloud で音声合成、ffmpeg で MP3 に変換。
  *
- * 入力: pitch/audio/narration.json
+ * 入力: pitch/[<pitch>/]audio/narration.json
  *      環境変数 AIVIS_API_KEY, AIVIS_MODEL_UUID
  *      (未設定なら $TEALUS_REPO/agent-server/.env から読む)
- * 出力: pitch/audio/slide-XX.mp3 (1-origin、zero-pad 2)
+ * 出力: pitch/[<pitch>/]audio/slide-XX.mp3 (1-origin、zero-pad 2)
  *
  * Flags:
- *   --slide N   特定 slide だけ生成 (テスト用)
- *   --force     既存ファイルがあっても上書き
- *   --dry-run   API 呼び出しせず予定のみ表示
+ *   --pitch <name>  pitch サブディレクトリ名 (例: --pitch field → pitch/field/audio/)
+ *                   未指定なら pitch/audio/ (Audience 1 デフォルト)
+ *   --slide N       特定 slide だけ生成 (テスト用)
+ *   --force         既存ファイルがあっても上書き
+ *   --dry-run       API 呼び出しせず予定のみ表示
  */
 
 const fs = require('fs');
@@ -19,7 +21,14 @@ const https = require('https');
 const { spawnSync } = require('child_process');
 
 const TEALUS_REPO = process.env.TEALUS_REPO || 'C:/app/tealus';
-const AUDIO_DIR = path.join(__dirname, '..', 'pitch', 'audio');
+
+function getPitchSub(argv) {
+  const i = argv.indexOf('--pitch');
+  return i >= 0 && argv[i + 1] ? argv[i + 1] : '';
+}
+const PITCH_SUB = getPitchSub(process.argv.slice(2));
+const PITCH_DIR = PITCH_SUB ? path.join('pitch', PITCH_SUB) : 'pitch';
+const AUDIO_DIR = path.join(__dirname, '..', PITCH_DIR, 'audio');
 const NARRATION = path.join(AUDIO_DIR, 'narration.json');
 
 // .env をパース (AIVIS_API_KEY が未設定の場合の fallback)

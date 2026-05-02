@@ -11,6 +11,10 @@
  *   - active slide が変わったら対応 audio を再生
  *   - audio ended で次 slide へ自動進行
  *
+ * Flags:
+ *   --pitch <name>  pitch サブディレクトリ名 (例: --pitch field → pitch/field/deck.html)
+ *                   未指定なら pitch/deck.html (Audience 1 デフォルト)
+ *
  * Debug:
  *   ?debug クエリパラメータを付けると console.log が有効になる
  *   例: /pitch/deck.html?debug
@@ -19,11 +23,18 @@
 const fs = require('fs');
 const path = require('path');
 
-const DECK = path.join(__dirname, '..', 'pitch', 'deck.html');
+function getPitchSub(argv) {
+  const i = argv.indexOf('--pitch');
+  return i >= 0 && argv[i + 1] ? argv[i + 1] : '';
+}
+const PITCH_SUB = getPitchSub(process.argv.slice(2));
+const PITCH_DIR = PITCH_SUB ? path.join('pitch', PITCH_SUB) : 'pitch';
+const DECK = path.join(__dirname, '..', PITCH_DIR, 'deck.html');
+const NARRATION = path.join(__dirname, '..', PITCH_DIR, 'audio', 'narration.json');
+
 const MARKER_BEGIN = '<!-- NARRATION-CONTROLLER:BEGIN -->';
 const MARKER_END = '<!-- NARRATION-CONTROLLER:END -->';
 
-const NARRATION = path.join(__dirname, '..', 'pitch', 'audio', 'narration.json');
 const TOTAL = JSON.parse(fs.readFileSync(NARRATION, 'utf8')).slides.length;
 
 const PAYLOAD = `${MARKER_BEGIN}
