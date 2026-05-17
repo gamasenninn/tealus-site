@@ -496,6 +496,51 @@ img { max-width: 100%; height: auto; }
   font-weight: 800;
 }
 
+/* ===== Tealus is not ===== */
+.not-section {
+  padding: 80px 0;
+  background: var(--bg-alt);
+}
+
+.not-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+.not-card {
+  display: grid;
+  grid-template-columns: 1fr auto 1.4fr;
+  gap: 24px;
+  align-items: center;
+  background: var(--bg);
+  border-radius: var(--radius);
+  padding: 20px 28px;
+  box-shadow: var(--shadow);
+}
+
+.not-label {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  text-decoration: line-through;
+  text-decoration-color: rgba(0, 0, 0, 0.3);
+}
+
+.not-arrow {
+  font-size: 1.3rem;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.not-value {
+  font-size: 0.98rem;
+  color: var(--text);
+  font-weight: 600;
+  line-height: 1.5;
+}
+
 /* ===== Capabilities ===== */
 .capabilities { padding: 100px 0; }
 
@@ -692,6 +737,14 @@ img { max-width: 100%; height: auto; }
   .usecases-grid { grid-template-columns: 1fr; }
   .concept-grid { grid-template-columns: 1fr; }
   .concept { padding: 60px 0 40px; }
+  .not-section { padding: 60px 0; }
+  .not-card {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    text-align: center;
+    padding: 20px 24px;
+  }
+  .not-arrow { transform: rotate(90deg); }
   .hero-badges { margin: -8px auto 24px; }
   .hero-badge { font-size: 0.75rem; padding: 5px 12px; }
   .capabilities-grid { grid-template-columns: 1fr; }
