@@ -116,6 +116,28 @@ img { max-width: 100%; height: auto; }
   margin: 0 auto 36px;
 }
 
+.hero-badges {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: -16px auto 32px;
+  max-width: 640px;
+}
+
+.hero-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  backdrop-filter: blur(4px);
+}
+
 .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
 
 .hero .btn-primary {
@@ -153,6 +175,40 @@ img { max-width: 100%; height: auto; }
   border-radius: 16px;
   display: block;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35), 0 0 0 8px rgba(255, 255, 255, 0.12);
+}
+
+/* ===== Concept ===== */
+.concept {
+  padding: 100px 0 80px;
+  background: var(--bg);
+}
+
+.concept-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+.concept-card {
+  background: var(--bg-alt);
+  border-radius: var(--radius);
+  padding: 28px 28px 24px;
+  border-left: 3px solid var(--primary);
+}
+
+.concept-card h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--text);
+}
+
+.concept-card p {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  line-height: 1.7;
 }
 
 /* ===== Features ===== */
@@ -634,6 +690,10 @@ img { max-width: 100%; height: auto; }
   .hero { padding: 120px 0 0; }
   .features-grid { grid-template-columns: 1fr; }
   .usecases-grid { grid-template-columns: 1fr; }
+  .concept-grid { grid-template-columns: 1fr; }
+  .concept { padding: 60px 0 40px; }
+  .hero-badges { margin: -8px auto 24px; }
+  .hero-badge { font-size: 0.75rem; padding: 5px 12px; }
   .capabilities-grid { grid-template-columns: 1fr; }
   .tech-grid { grid-template-columns: repeat(2, 1fr); }
   .comparison-table { font-size: 0.85rem; }
