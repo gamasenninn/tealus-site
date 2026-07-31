@@ -109,6 +109,15 @@ img { max-width: 100%; height: auto; }
 
 .hero h1 span { color: rgba(255, 255, 255, 0.95); }
 
+.hero-lead {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.5;
+  color: white;
+  max-width: 680px;
+  margin: -6px auto 18px;
+}
+
 .hero p {
   font-size: 1.15rem;
   color: rgba(255, 255, 255, 0.85);
@@ -732,6 +741,7 @@ img { max-width: 100%; height: auto; }
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
   .hero h1 { font-size: 1.8rem; }
+  .hero-lead { font-size: 1.15rem; }
   .hero { padding: 120px 0 0; }
   .features-grid { grid-template-columns: 1fr; }
   .usecases-grid { grid-template-columns: 1fr; }
