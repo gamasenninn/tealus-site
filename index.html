@@ -49,9 +49,9 @@
   <section class="hero">
     <div class="container">
       <h1>人と AI が一緒に働く職場。<br><span>会話が、業務の地図になる。</span></h1>
-      <p class="hero-lead">AI が声で答える。NAS 1台で動く。月額ゼロ円。</p>
+      <p class="hero-lead">AI が声で答える。NAS 1台で動く。本体は月額ゼロ円。</p>
       <p class="hero-sub">人がフォーマットに合わせなくていい。「これで進めて」のひと言やボタン 1 つで、判断だけを渡せる。清書は AI が引き受けます。</p>
-      <p>LINE のように使える社内チャット。スマホ・PC どちらでも（アプリとして入れられます）。データの置き場所は自社で、どの AI に何を渡すかも自社で選べる。本体は 50 人使っても月額ゼロ円。</p>
+      <p>LINE のように使える社内チャット。スマホ・PC どちらでも（アプリとして入れられます）。データの置き場所は自社で、どの AI に何を渡すかも自社で選べる。50 人で使っても本体は月額ゼロ円（AI・文字起こし・読み上げの外部 API 料金は別）。</p>
       <div class="hero-badges">
         <span class="hero-badge">AI音声応答</span>
         <span class="hero-badge">判断だけを渡す</span>
@@ -157,13 +157,13 @@
     <div class="container">
       <div class="section-title">
         <h2>ユースケース</h2>
-        <p>さまざまな現場で Tealus が活躍しています</p>
+        <p>使い方の例を、3 つ紹介します</p>
       </div>
       <div class="usecases-grid">
         <div class="usecase-card">
           <img src="assets/images/uc-construction.png" alt="現場で、声で AI に聞く" class="usecase-img">
           <h3>現場で、声で AI に聞く</h3>
-          <p>建設現場や倉庫で、手が塞がっていても AI と 1 対 1 の部屋なら声で質問でき、音声で答えが返ります。スマホを触らずに情報を得られます。</p>
+          <p>建設現場や倉庫で文字を打てないときも、AI と 1 対 1 の部屋なら声で質問でき、答えも音声で返ります。</p>
           <div class="usecase-tags">
             <span class="usecase-tag">音声メッセージ</span>
             <span class="usecase-tag">TTS読み上げ</span>
@@ -227,7 +227,7 @@
             <tr class="unique-row"><td>AI が同じ部屋のメンバー</td><td class="highlight">&#10003;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
             <tr class="unique-row"><td>現場音声を知識化</td><td class="highlight">&#10003;</td><td>&mdash;</td><td>&#9651;</td><td>&mdash;</td></tr>
             <tr class="unique-row"><td>使うほど組織語彙が育つ</td><td class="highlight">&#10003;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
-            <tr><td>月額費用 (50人)</td><td class="highlight price-zero">0円</td><td>~5万円</td><td>~3万円</td><td>0円~</td></tr>
+            <tr><td>本体の月額費用 (50人)</td><td class="highlight price-zero">0円</td><td>~5万円</td><td>~3万円</td><td>0円~</td></tr>
           </tbody>
         </table>
       </div>
@@ -296,7 +296,7 @@
     <div class="container">
       <div class="section-title">
         <h2>技術スタック</h2>
-        <p>モダンな技術で構築されたオープンソースプロジェクト</p>
+        <p>サーバーも画面も TypeScript。Node.js 24 と PostgreSQL 16 が土台です。</p>
       </div>
       <div class="tech-grid">
         <div class="tech-item">
@@ -459,7 +459,14 @@
           <div class="story-date">2026.10.15</div>
           <div class="story-content">
             <h3>来ないものに、気づけるようになった</h3>
-            <p>v0.11.0 で見張りを搭載。バックアップ・通話履歴・無線など「来るはずのもの」が来ないと、業務メモに 1 回だけ知らせます。沈黙で見落とすのを防ぐ——気づく役は AI、直すのは人。「毎日、現場で回りながら、まだ育っている」——それが今の Tealus です。</p>
+            <p>v0.11.0 で見張りを搭載。バックアップ・通話履歴・無線など「来るはずのもの」が来ないと、業務メモに 1 回だけ知らせます。沈黙で見落とすのを防ぐ——気づく役は見張り、直すのは人。</p>
+          </div>
+        </div>
+        <div class="story-item">
+          <div class="story-date">2026.11.17</div>
+          <div class="story-content">
+            <h3>黙って失敗していたところを、言うようにした</h3>
+            <p>v0.12.0 では、「押しても何も起きない」「AI が答えない」「通知が届かない」——黙って失敗していた場面で、理由を伝えるようにしました。AI が順番待ちなら「前に 2 件あります」のように返し、再起動で途切れた仕事は部屋に知らせます（自動でやり直しはしません）。見張りは、通知が届かなくなっている人も見られるようになりました。毎日、現場で回りながら、まだ育っている——それが今の Tealus です。</p>
           </div>
         </div>
       </div>
